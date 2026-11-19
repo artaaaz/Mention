@@ -1,0 +1,612 @@
+/* ═════════════════════════════════════════════
+   Multi-halaman: transisi, hero halaman dalam,
+   Tentang, Karya, detail proyek, Kontak
+   ═════════════════════════════════════════════ */
+
+/* ───────────── Transisi antar-halaman (slide + blur) ───────────── */
+main,
+.footer {
+  transition:
+    opacity 0.5s var(--ease),
+    transform 0.75s var(--ease),
+    filter 0.75s var(--ease);
+}
+/* keluar: konten meluncur naik sambil memburam */
+body.is-leaving main,
+body.is-leaving .footer {
+  opacity: 0;
+  transform: translateY(-56px);
+  filter: blur(16px);
+  pointer-events: none;
+}
+/* masuk (bukan kunjungan pertama): mulai dari bawah & buram, tanpa splash */
+html.is-return .splash {
+  display: none;
+}
+html.is-return body.is-loading main,
+html.is-return body.is-loading .footer,
+body.is-entering main,
+body.is-entering .footer {
+  opacity: 0;
+  transform: translateY(56px);
+  filter: blur(16px);
+  transition: none;
+}
+html.is-return body.is-loading .header {
+  transform: none;
+}
+
+/* marquee: grup hanya pembungkus, isinya tetap ikut flex track */
+.marquee__group {
+  display: contents;
+}
+
+/* ───────────── Menu: halaman aktif ───────────── */
+.menu__list a[aria-current="page"] span {
+  transform: scale(1);
+  background: var(--black);
+  box-shadow: 0 0 0 4px var(--yellow);
+}
+
+/* ───────────── Hero halaman dalam ───────────── */
+.page-hero {
+  padding: calc(var(--header-pad) * 2 + var(--pill-h) + clamp(48px, 9vw, 140px)) var(--gutter) clamp(32px, 5vw, 72px);
+}
+.page-title {
+  max-width: 11em;
+  font-size: clamp(2.9rem, 9.2vw, 9.5rem);
+  font-weight: 600;
+  line-height: 0.95;
+  letter-spacing: -0.055em;
+  text-wrap: balance;
+}
+.page-lede {
+  max-width: 40ch;
+  margin: clamp(24px, 3vw, 44px) 0 0 auto;
+  color: #c8c8c1;
+  font-size: clamp(1.05rem, 1.5vw, 1.375rem);
+  line-height: 1.45;
+}
+.page-hero--center {
+  min-height: 78svh;
+}
+.page-hero__actions {
+  margin-top: clamp(28px, 4vw, 56px);
+}
+.page-hero--project .page-title {
+  font-size: clamp(2.8rem, 8vw, 8.5rem);
+}
+.back {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: clamp(28px, 4vw, 56px);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--muted);
+  text-decoration: none;
+  transition: color 0.3s;
+}
+.back svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: transform 0.45s var(--ease);
+}
+.back:hover {
+  color: var(--yellow);
+}
+.back:hover svg {
+  transform: translateX(-4px);
+}
+
+/* ───────────── Tentang ───────────── */
+.visual {
+  position: relative;
+  display: grid;
+  place-items: center;
+  height: clamp(320px, 62vh, 720px);
+  margin-inline: var(--gutter);
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: #111113;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+}
+.visual__glow {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(45% 55% at 50% 55%, color-mix(in srgb, var(--yellow) 26%, transparent), transparent 70%),
+    radial-gradient(rgba(255, 255, 255, 0.16) 1.2px, transparent 1.8px) 0 0 / 28px 28px;
+}
+.visual__mark {
+  position: relative;
+  width: min(34%, 300px);
+}
+.about--page {
+  padding-top: clamp(80px, 11vw, 180px);
+}
+.values__list {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 var(--gutter);
+  margin: clamp(40px, 6vw, 88px) 0 0;
+  padding: 0;
+}
+.value {
+  padding: clamp(22px, 2.6vw, 36px) 0;
+  border-top: 1.5px solid rgba(0, 0, 0, 0.14);
+}
+.value__no {
+  display: block;
+  margin-bottom: clamp(20px, 3vw, 44px);
+  font-size: 14px;
+  font-weight: 600;
+  color: rgba(0, 0, 0, 0.5);
+}
+.value h3 {
+  margin-bottom: 10px;
+  font-size: clamp(1.5rem, 2.6vw, 2.5rem);
+  font-weight: 600;
+  line-height: 1.08;
+  letter-spacing: -0.04em;
+}
+.value p {
+  max-width: 44ch;
+  color: rgba(0, 0, 0, 0.66);
+}
+.values + .process {
+  padding-top: clamp(96px, 12vw, 200px);
+}
+
+/* ───────────── Karya ───────────── */
+.work-card {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+}
+.work-card[hidden] {
+  display: none;
+}
+.work__more {
+  display: flex;
+  justify-content: center;
+  margin-top: clamp(48px, 6vw, 96px);
+}
+.work--page {
+  padding-top: clamp(8px, 2vw, 32px);
+}
+.work--page .work__grid {
+  margin-top: clamp(28px, 3.4vw, 56px);
+}
+.work__grid--flat .work-card:nth-child(even) {
+  margin-top: 0;
+}
+.work__empty {
+  padding: 48px 0;
+  color: var(--muted);
+}
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.filter {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: 4px;
+  height: 46px;
+  padding: 0 20px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--ink-2);
+  color: var(--white);
+  font: 600 15px/46px var(--font);
+  letter-spacing: -0.01em;
+  cursor: pointer;
+  transition:
+    background-color 0.35s var(--ease),
+    color 0.35s var(--ease);
+}
+.filter sup {
+  font-size: 10px;
+  line-height: 30px;
+  opacity: 0.6;
+}
+.filter:hover {
+  background: #26262a;
+}
+.filter[aria-pressed="true"] {
+  background: var(--yellow);
+  color: var(--black);
+}
+
+.cursor-badge {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 90;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+.cursor-badge span {
+  position: absolute;
+  top: -48px;
+  left: -48px;
+  display: grid;
+  place-items: center;
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  /* hitam + cincin putih supaya terbaca di cover kuning, putih, maupun gelap */
+  background: var(--black);
+  color: var(--white);
+  box-shadow: 0 0 0 2px var(--white);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  opacity: 0;
+  filter: blur(10px);
+  transform: scale(0.3);
+  transition:
+    opacity 0.35s var(--ease),
+    transform 0.5s var(--ease),
+    filter 0.5s var(--ease);
+}
+.cursor-badge.is-visible span {
+  opacity: 1;
+  filter: blur(0);
+  transform: scale(1);
+}
+
+/* ───────────── Detail proyek ───────────── */
+.project-cover {
+  position: relative;
+  height: clamp(280px, 78vh, 900px);
+  margin-inline: var(--gutter);
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--ink-2);
+}
+.project-cover img,
+.project-shot img {
+  position: absolute;
+  inset: -8% 0;
+  width: 100%;
+  height: 116%;
+  object-fit: cover;
+}
+.project-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr);
+  gap: clamp(32px, 5vw, 96px);
+  padding: clamp(64px, 9vw, 150px) var(--gutter);
+}
+.project-meta {
+  display: grid;
+  align-content: start;
+  margin: 0;
+}
+.project-meta div {
+  display: grid;
+  grid-template-columns: 7rem 1fr;
+  gap: 16px;
+  padding: 16px 0;
+  border-top: 1px solid var(--line);
+}
+.project-meta div:last-child {
+  border-bottom: 1px solid var(--line);
+}
+.project-meta dt {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  line-height: 2;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.project-meta dd {
+  margin: 0;
+  font-weight: 500;
+}
+.project-text {
+  display: grid;
+  gap: clamp(32px, 4vw, 64px);
+}
+.project-text h2 {
+  margin-bottom: 14px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--yellow);
+}
+.project-text p {
+  max-width: 26em;
+  font-size: clamp(1.25rem, 2.2vw, 2.1rem);
+  font-weight: 500;
+  line-height: 1.25;
+  letter-spacing: -0.03em;
+}
+.project-gallery {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(12px, 1.6vw, 24px);
+  padding: 0 var(--gutter) clamp(64px, 9vw, 150px);
+}
+.project-shot {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--ink-2);
+}
+
+/* ───────────── Kontak ───────────── */
+.contact {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr);
+  gap: clamp(40px, 6vw, 110px);
+  padding: clamp(24px, 4vw, 64px) var(--gutter) clamp(80px, 11vw, 180px);
+}
+.contact__info {
+  display: grid;
+  align-content: start;
+  gap: clamp(28px, 3.4vw, 48px);
+}
+.contact__mail {
+  font-size: clamp(1.3rem, 2.4vw, 2.2rem);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+}
+.contact__social {
+  list-style: none;
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+}
+.brief {
+  display: grid;
+  gap: clamp(24px, 3vw, 40px);
+  padding: clamp(24px, 3.4vw, 56px);
+  border-radius: var(--radius);
+  background: var(--ink);
+  box-shadow: inset 0 0 0 1px var(--line);
+}
+.field {
+  display: grid;
+  gap: 10px;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+.field label,
+.field legend {
+  padding: 0;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.field legend {
+  margin-bottom: 12px;
+}
+.field input[type="text"],
+.field input[type="email"],
+.field textarea {
+  width: 100%;
+  padding: 6px 0 14px;
+  border: 0;
+  border-bottom: 1.5px solid rgba(255, 255, 255, 0.22);
+  border-radius: 0;
+  background: transparent;
+  color: var(--white);
+  font: 500 clamp(1.15rem, 1.8vw, 1.6rem) / 1.3 var(--font);
+  letter-spacing: -0.02em;
+  resize: vertical;
+  transition: border-color 0.3s;
+}
+.field input::placeholder,
+.field textarea::placeholder {
+  color: rgba(255, 255, 255, 0.28);
+}
+.field input:focus-visible,
+.field textarea:focus-visible {
+  outline: none;
+  border-color: var(--yellow);
+}
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.field .chip {
+  position: relative;
+  font-size: 15px;
+  letter-spacing: -0.01em;
+  text-transform: none;
+  color: var(--white);
+  cursor: pointer;
+}
+.chip input {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+.chip span {
+  display: block;
+  padding: 11px 18px;
+  border-radius: 999px;
+  box-shadow: inset 0 0 0 1.5px rgba(255, 255, 255, 0.22);
+  transition:
+    background-color 0.3s var(--ease),
+    color 0.3s var(--ease),
+    box-shadow 0.3s var(--ease);
+}
+.chip:hover span {
+  box-shadow: inset 0 0 0 1.5px var(--white);
+}
+.chip input:checked + span {
+  background: var(--yellow);
+  color: var(--black);
+  box-shadow: inset 0 0 0 1.5px var(--yellow);
+}
+.chip input:focus-visible + span {
+  outline: 2px solid var(--yellow);
+  outline-offset: 3px;
+}
+.brief__foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px 24px;
+}
+.brief__note {
+  flex: 1;
+  min-width: 220px;
+  font-size: 13px;
+  color: var(--muted);
+}
+.brief__note.is-error {
+  color: var(--yellow);
+}
+.btn--yellow {
+  border: 0;
+  background: var(--yellow);
+  font-family: var(--font);
+  cursor: pointer;
+}
+@media (hover: hover) {
+  .btn--yellow:hover {
+    background: var(--white);
+    box-shadow: none;
+  }
+}
+
+/* ───────────── Halaman berikutnya ───────────── */
+.next {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px var(--gutter);
+  margin: clamp(48px, 7vw, 120px) var(--gutter) 0;
+  padding: clamp(24px, 3.4vw, 48px) clamp(0px, 1.6vw, 24px);
+  border-top: 1.5px solid rgba(255, 255, 255, 0.2);
+  border-bottom: 1.5px solid rgba(255, 255, 255, 0.2);
+  color: var(--white);
+  text-decoration: none;
+  overflow: hidden;
+  transition: color 0.45s var(--ease);
+}
+.next::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--yellow);
+  transform: translateY(101%);
+  transition: transform 0.65s var(--ease);
+}
+.next__label {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  opacity: 0.6;
+}
+.next__title {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2em;
+  font-size: clamp(2.8rem, 10vw, 10rem);
+  font-weight: 600;
+  line-height: 0.95;
+  letter-spacing: -0.055em;
+}
+.next__title svg {
+  flex: none;
+  width: 0.62em;
+  height: 0.62em;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: transform 0.65s var(--ease);
+}
+@media (hover: hover) {
+  .next:hover {
+    color: var(--black);
+  }
+  .next:hover::before {
+    transform: translateY(0);
+  }
+  .next:hover .next__title svg {
+    transform: translateX(0.12em);
+  }
+}
+
+/* ───────────── Footer (4 kolom) ───────────── */
+.footer__grid {
+  grid-template-columns: 1.3fr 1fr 1fr 1.3fr;
+}
+
+@media (max-width: 900px) {
+  .page-lede {
+    margin-left: 0;
+  }
+  .project-body,
+  .contact {
+    grid-template-columns: 1fr;
+  }
+  .footer__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  /* kolom email butuh lebar penuh supaya tidak keluar layar */
+  .footer__col:last-child {
+    grid-column: 1 / -1;
+  }
+}
+.link--big,
+.contact__mail {
+  overflow-wrap: anywhere;
+}
+@media (max-width: 640px) {
+  .values__list,
+  .project-gallery {
+    grid-template-columns: 1fr;
+  }
+  .project-shot {
+    aspect-ratio: 4 / 3;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  main,
+  .footer {
+    transition-duration: 0.01s;
+  }
+  body.is-leaving main,
+  body.is-leaving .footer,
+  body.is-entering main,
+  body.is-entering .footer,
+  html.is-return body.is-loading main,
+  html.is-return body.is-loading .footer {
+    transform: none;
+    filter: none;
+  }
+}

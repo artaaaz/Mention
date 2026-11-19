@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Mention — Agensi Kreatif</title>
+    <meta
+      name="description"
+      content="Mention adalah agensi kreatif: strategi brand, desain, konten, dan web yang bikin brand kamu layak di-mention."
+    />
+    <meta name="theme-color" content="#070708" />
+    <link rel="icon" href="/icon.png" type="image/png" />
+    <link rel="preload" as="image" href="/logo.png" crossorigin="anonymous" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <script>
+      // Splash cuma tampil di kunjungan pertama dalam satu sesi.
+      try {
+        if (sessionStorage.getItem("mention:seen")) document.documentElement.classList.add("is-return");
+      } catch (e) {}
+    </script>
+    <noscript>
+      <style>
+        .splash { display: none !important; }
+        body.is-loading { overflow: auto !important; }
+        .noscript { padding: 40vh 24px; text-align: center; }
+      </style>
+    </noscript>
+  </head>
+
+  <body class="is-loading">
+    <!-- Splash ditaruh di luar React supaya langsung tampil sebelum JavaScript selesai dimuat.
+         Urutan animasinya diatur di src/lib/splash.js -->
+    <div class="splash" id="splash" aria-hidden="true">
+      <div class="splash__glow"></div>
+      <div class="splash__logo">
+        <div class="splash__row">
+          <div class="splash__m"><span></span></div>
+          <div class="splash__ention"><span></span></div>
+        </div>
+      </div>
+      <div class="splash__bar"><span></span></div>
+    </div>
+
+    <div id="root"></div>
+    <noscript><p class="noscript">Situs Mention butuh JavaScript untuk ditampilkan.</p></noscript>
+
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
