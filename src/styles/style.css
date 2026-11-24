@@ -905,7 +905,7 @@ body.is-loading .header {
     var(--white);
 }
 
-/* ───────────── CTA (layar penuh warna brand, isi di tengah, bola cahaya di latar) ─────────────
+/* ───────────── CTA (layar penuh warna brand, isi di tengah, kolam bola 3D di atasnya) ─────────────
    .cta-hold = jalur scroll tempat panel "ditahan":
      1 layar (panel) + --hold (jarak tahan) + --cover (bagian yang ditimpa footer).
    Margin bawah negatif membuat footer naik MENUTUPI panel yang masih menempel.
@@ -931,37 +931,15 @@ body.is-loading .header {
   text-align: center;
   overflow: hidden;
 }
-/* bola-bola cahaya (GlowOrbs.jsx): posisi & skalanya digerakkan dari sana */
-.cta__orbs {
+/* kolam bola (React Bits Ballpit): di atas teks, tapi klik tembus ke bawahnya */
+.cta__balls {
   position: absolute;
   inset: 0;
-  z-index: -1;
-  overflow: hidden;
+  z-index: 1;
   pointer-events: none;
 }
-.orb {
-  --size: 30vmin;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: var(--size);
-  aspect-ratio: 1;
-  margin: calc(var(--size) / -2) 0 0 calc(var(--size) / -2);
-  border-radius: 50%;
-  /* sorotan sedikit di kiri-atas supaya terbaca sebagai bola, bukan noda */
-  background: radial-gradient(circle at 40% 36%, #fff 0%, rgba(255, 255, 255, 0.78) 26%, rgba(255, 255, 255, 0) 70%);
-  will-change: transform;
-}
-.orb--a {
-  --size: 68vmin;
-}
-.orb--b {
-  --size: 34vmin;
-  opacity: 0.85;
-}
-.orb--c {
-  --size: 20vmin;
-  opacity: 0.9;
+.cta__balls[hidden] {
+  display: none; /* tertutup footer → Ballpit berhenti me-render */
 }
 .cta__plus {
   position: absolute;
@@ -1001,6 +979,7 @@ body.is-loading .header {
 }
 .cta__scroll {
   position: absolute;
+  z-index: 2; /* di atas bola */
   left: 50%;
   bottom: clamp(28px, 7vh, 72px);
   display: inline-flex;
