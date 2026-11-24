@@ -29,3 +29,10 @@ export function scrollToTop() {
   if (lenis) lenis.scrollTo(0, { duration: 1.4 });
   else window.scrollTo({ top: 0 });
 }
+
+/** Scroll halus ke dasar halaman (pil "Terus scroll" di CTA). */
+export function scrollToBottom() {
+  const bottom = document.documentElement.scrollHeight;
+  if (lenis) lenis.scrollTo(bottom, { duration: 1.6 });
+  else window.scrollTo({ top: bottom });
+}

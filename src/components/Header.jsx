@@ -33,11 +33,14 @@ export default function Header() {
       lastY = y;
 
       const probe = (headerRef.current?.getBoundingClientRect().height ?? 80) / 2;
-      const onLight = [...document.querySelectorAll('[data-header="ink"]')].some((panel) => {
+      // Blok bertanda data-header yang sedang berada di bawah header. "ink" = latar terang (header
+      // hitam), "light" = latar gelap. Yang terakhir dalam urutan dokumen menang: blok gelap di dalam
+      // halaman terang, atau footer yang naik menutupi panel yang masih menempel.
+      const under = [...document.querySelectorAll("[data-header]")].filter((panel) => {
         const rect = panel.getBoundingClientRect();
         return rect.top <= probe && rect.bottom >= probe;
       });
-      setInk(onLight);
+      setInk(under.at(-1)?.dataset.header === "ink");
     };
     update();
     window.addEventListener("scroll", update, { passive: true });

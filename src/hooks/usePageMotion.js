@@ -11,6 +11,7 @@ import { animateIn, BLUR_IN, BLUR_OUT, clearBlur, gsap, reduceMotion, ScrollTrig
  *   data-scrub        paragraf besar, kata menajam mengikuti scroll
  *   data-reveal       elemen biasa: slide + blur saat ter-scroll
  *   data-parallax     cover karya
+ *   data-drift="-10"  bergeser ke samping mengikuti scroll (persen lebar elemen)
  *   data-float        elemen melayang
  *
  * Kata-kata dibungkus oleh komponen <Words> (span.w).
@@ -108,6 +109,15 @@ export function usePageMotion() {
             scrollTrigger: { trigger: el.parentElement, start: "top bottom", end: "bottom top", scrub: true },
           },
         );
+      }
+
+      // blok hero bergeser ke samping saat halaman di-scroll (nilai = persen lebar elemen)
+      for (const el of q("[data-drift]")) {
+        gsap.to(el, {
+          xPercent: Number(el.dataset.drift),
+          ease: "none",
+          scrollTrigger: { trigger: el.closest("section") ?? el, start: "top top", end: "bottom top", scrub: true },
+        });
       }
 
       for (const panel of q(".panel")) {

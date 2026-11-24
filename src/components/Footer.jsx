@@ -1,6 +1,6 @@
 import { scrollToTop } from "../lib/scroll.js";
 import { CONTACT } from "../data/site.js";
-import { TLink } from "./ui.jsx";
+import { ArrowRight, ArrowUp, TLink } from "./ui.jsx";
 
 export function SocialLinks({ className }) {
   return (
@@ -25,7 +25,8 @@ export function SocialLinks({ className }) {
 
 export default function Footer() {
   return (
-    <footer className="footer">
+    // data-header: lihat Header.jsx — footer terang (logo header jadi hitam), blok "halaman berikutnya" gelap
+    <footer className="footer" data-header="ink">
       <div className="footer__grid">
         <div className="footer__col">
           <p className="footer__label">Studio</p>
@@ -35,7 +36,10 @@ export default function Footer() {
             {CONTACT.hours}
           </p>
         </div>
+
         <div className="footer__col">
+          <p className="footer__label">Sosial</p>
+          <SocialLinks />
           <p className="footer__label">Jelajah</p>
           <ul>
             <li><TLink className="link" to="/">Beranda</TLink></li>
@@ -44,35 +48,25 @@ export default function Footer() {
             <li><TLink className="link" to="/contact">Kontak</TLink></li>
           </ul>
         </div>
-        <div className="footer__col">
-          <p className="footer__label">Sosial</p>
-          <SocialLinks />
-        </div>
-        <div className="footer__col">
-          <p className="footer__label">Proyek baru</p>
-          <a className="link link--big" href={`mailto:${CONTACT.email}`}>
-            {CONTACT.email}
+
+        <div className="footer__col footer__col--wide">
+          <h2 className="footer__title">Punya proyek? Ceritain ke kami.</h2>
+          <a className="footer__mail" href={`mailto:${CONTACT.email}`}>
+            <span>{CONTACT.email}</span>
+            <ArrowRight />
           </a>
         </div>
       </div>
 
-      <div className="footer__wordmark" aria-hidden="true">
-        <span className="logo logo--full" />
-      </div>
-
       <div className="footer__base">
         <span>©2026 Mention. Semua hak dilindungi.</span>
-        <a
-          className="link"
-          href="#top"
-          onClick={(event) => {
-            event.preventDefault();
-            scrollToTop();
-          }}
-        >
-          Kembali ke atas ↑
-        </a>
+        <button className="footer__top" type="button" aria-label="Kembali ke atas" onClick={scrollToTop}>
+          <ArrowUp />
+        </button>
       </div>
+
+      {/* diisi oleh <NextPage> milik halaman yang sedang tampil */}
+      <div id="next-slot" data-header="light" />
     </footer>
   );
 }

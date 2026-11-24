@@ -1,77 +1,100 @@
+import { useEffect, useRef } from "react";
+import Deck from "../components/Deck.jsx";
+import ScrollLine from "../components/ScrollLine.jsx";
 import { Cta } from "../components/sections.jsx";
 import { Eyebrow, NextPage, Words } from "../components/ui.jsx";
+import { CLIENTS } from "../data/about.js";
 import { useMeta } from "../hooks/useMeta.js";
 import { usePageMotion } from "../hooks/usePageMotion.js";
+import { gsap, reduceMotion } from "../lib/motion.js";
 
-const VALUES = [
-  {
-    title: "Jujur dari awal",
-    text: "Kalau sebuah ide nggak akan berhasil, kami bilang — sebelum anggaran kamu terpakai.",
-  },
-  {
-    title: "Ide di atas tren",
-    text: "Tren datang dan pergi. Kami cari gagasan yang masih relevan setahun dari sekarang.",
-  },
-  {
-    title: "Detail itu serius",
-    text: "Jarak antarhuruf, jeda animasi, kalimat tombol — hal kecil yang bikin karya terasa mahal.",
-  },
-  {
-    title: "Hasil bisa diukur",
-    text: "Tiap proyek punya target yang disepakati di depan, dan kami laporkan hasilnya apa adanya.",
-  },
-];
+const LOOP = Array.from({ length: 4 });
 
-const STEPS = [
-  {
-    title: "Dengar",
-    text: "Kami mulai dari bisnis kamu: tujuan, audiens, dan masalah yang sebenarnya perlu dipecahkan.",
-  },
-  {
-    title: "Rancang",
-    text: "Strategi dan arah kreatif disepakati dulu, supaya eksekusi nggak bolak-balik revisi.",
-  },
-  {
-    title: "Eksekusi",
-    text: "Desain, konten, dan development jalan bareng dalam satu tim — detail dijaga sampai akhir.",
-  },
-  {
-    title: "Ukur",
-    text: "Setelah tayang, kami pantau hasilnya dan terus perbaiki berdasarkan data, bukan tebakan.",
-  },
-];
+const BRAND_SPEED = 46; // px per detik saat halaman diam
+const BRAND_BOOST = 0.32; // seberapa kuat kecepatan scroll ikut mendorong
 
-const no = (i) => String(i + 1).padStart(2, "0");
+/** Satu baris logo klien yang berjalan terus; scroll mempercepat / membalik arahnya. */
+function BrandRow() {
+  const track = useRef(null);
+
+  useEffect(() => {
+    if (reduceMotion) return undefined;
+    const el = track.current;
+    let x = 0;
+    let lastY = window.scrollY;
+    let velocity = 0;
+
+    const tick = (_time, deltaMs) => {
+      const dt = Math.min(deltaMs, 50) / 1000;
+      if (dt <= 0) return;
+      const y = window.scrollY;
+      velocity += ((y - lastY) / dt - velocity) * 0.12;
+      lastY = y;
+      const half = el.scrollWidth / 2; // isi diulang genap → geser setengahnya = mulus
+      if (!half) return;
+      x -= (BRAND_SPEED + velocity * BRAND_BOOST) * dt;
+      x = ((x % half) - half) % half; // selalu di antara -half … 0
+      el.style.transform = `translate3d(${x.toFixed(2)}px, 0, 0)`;
+    };
+    gsap.ticker.add(tick);
+    return () => gsap.ticker.remove(tick);
+  }, []);
+
+  return (
+    <div className="brands__row" data-reveal aria-hidden="true">
+      <div className="brands__track" ref={track}>
+        {LOOP.map((_, g) => (
+          <span className="marquee__group" key={g}>
+            {CLIENTS.map((client) => (
+              <span
+                className="brand"
+                key={client.name}
+                style={{
+                  "--logo": `url("${client.logo}")`,
+                  "--ratio": client.ratio,
+                  // logo lebar dibuat sedikit lebih pendek supaya semuanya terasa sama besar
+                  "--scale": client.ratio ** -0.35,
+                }}
+              />
+            ))}
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+}
 
 export default function About() {
   useMeta(
     "Tentang",
-    "Kenalan dengan Mention: cara kami berpikir, nilai yang kami pegang, dan proses kerja dari ide sampai tayang.",
+    "Kenalan dengan Mention: siapa kami, brand yang kami tangani, dan bidang keahlian kami.",
   );
   const scope = usePageMotion();
 
   return (
     <div ref={scope}>
-      <section className="page-hero">
+      {/* ───────────── Hero ───────────── */}
+      <section className="page-hero about-hero">
         <Eyebrow data-intro>Tentang</Eyebrow>
-        <h1 className="page-title" data-intro-title>
-          <Words>Brand bagus itu yang</Words>
-          <span className="hl">
-            <Words>dibicarakan orang.</Words>
+        <h1 className="about-hero__title" data-intro-title>
+          <span className="about-hero__line" data-drift="-12">
+            <Words>Kami agensi kreatif</Words>
+          </span>
+          <span className="about-hero__line about-hero__line--end hl" data-drift="12">
+            <Words>yang bikin brand layak di-mention.</Words>
           </span>
         </h1>
-        <p className="page-lede" data-intro>
-          Mention lahir dari satu keyakinan sederhana: karya kreatif baru berhasil kalau orang mau menyebutnya ke
-          orang lain.
-        </p>
+        <div className="about-hero__foot" data-intro>
+          <span className="about-hero__scroll">
+            <span className="plus" aria-hidden="true" />
+            Scroll untuk jelajah
+          </span>
+          <p className="page-lede">
+            Mention lahir dari satu keyakinan sederhana: karya kreatif baru berhasil kalau orang mau menyebutnya ke
+            orang lain.
+          </p>
+        </div>
       </section>
-
-      <div className="visual" data-intro>
-        <div className="visual__glow" aria-hidden="true" />
-        <span className="logo-mark visual__mark" aria-hidden="true" data-float />
-        <span className="hero__tag hero__tag--tl">Mention&nbsp;Studio</span>
-        <span className="hero__tag hero__tag--tr">Jakarta, ID</span>
-      </div>
 
       {/* ───────────── Cerita ───────────── */}
       <section className="about about--page">
@@ -94,45 +117,36 @@ export default function About() {
         </div>
       </section>
 
-      {/* ───────────── Nilai ───────────── */}
-      <section className="values panel panel--white" data-header="ink">
-        <div className="section-head">
-          <Eyebrow data-reveal>Yang kami pegang</Eyebrow>
-          <h2 className="section-title" data-split>
-            <Words>Empat hal yang nggak bisa ditawar.</Words>
-          </h2>
+      {/* ───────────── Klien ───────────── */}
+      <section className="brands">
+        <div className="section-head section-head--split">
+          <div>
+            <Eyebrow data-reveal>Klien</Eyebrow>
+            <h2 className="section-title" data-split>
+              <Words>Brand yang kami tangani.</Words>
+            </h2>
+          </div>
+          <p className="section-sub" data-reveal>
+            Mereka yang sudah jalan bareng Mention.
+          </p>
         </div>
-        <ul className="values__list">
-          {VALUES.map((value, i) => (
-            <li className="value" key={value.title} data-reveal>
-              <span className="value__no">{no(i)}</span>
-              <h3>{value.title}</h3>
-              <p>{value.text}</p>
-            </li>
+        <BrandRow />
+        <ul className="sr-only">
+          {CLIENTS.map((client) => (
+            <li key={client.name}>{client.name}</li>
           ))}
         </ul>
       </section>
 
-      {/* ───────────── Proses ───────────── */}
-      <section className="process">
-        <div className="section-head">
-          <Eyebrow data-reveal>Cara Kerja</Eyebrow>
-          <h2 className="section-title" data-split>
-            <Words>Tempat ide kreatif jadi hasil nyata.</Words>
-          </h2>
-        </div>
-        <ol className="process__grid">
-          {STEPS.map((step, i) => (
-            <li className="step" key={step.title} data-reveal>
-              <span className="step__no">{no(i)}</span>
-              <h3>{step.title}</h3>
-              <p>{step.text}</p>
-            </li>
-          ))}
-        </ol>
-      </section>
+      {/* Dari kartu sampai CTA: satu garis tergambar mengikuti scroll di belakang isinya */}
+      <div className="line-flow">
+        <ScrollLine />
 
-      <Cta />
+        {/* ───────────── Keahlian (kartu yang terbalik saat di-scroll) ───────────── */}
+        <Deck />
+
+        <Cta />
+      </div>
       <NextPage to="/projects" title="Karya" />
     </div>
   );

@@ -69,7 +69,7 @@ export default function Projects() {
         </div>
 
         {/* semua kartu tetap ter-mount; yang tidak cocok disembunyikan */}
-        <div className="work__grid work__grid--flat" ref={gridRef}>
+        <div className="work__grid" ref={gridRef}>
           {projects.map((project) => (
             <WorkCard key={project.slug} project={project} hidden={!matches(project)} />
           ))}
