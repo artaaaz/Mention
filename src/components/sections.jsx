@@ -2,7 +2,7 @@
 
 import { lazy, Suspense, useEffect, useRef, useState } from "react";
 import { scrollToBottom } from "../lib/scroll.js";
-import { ArrowDown, Words } from "./ui.jsx";
+import { ArrowDown } from "./ui.jsx";
 
 // Kolam bola dari React Bits (reactbits.dev → Ballpit), dimuat terpisah.
 const Ballpit = lazy(() => import("./Ballpit/Ballpit.jsx"));
@@ -15,6 +15,33 @@ const BALLS_START = 36;
 const BALLS_MORE = 84; // tambahan sampai panel selesai ditahan
 const BALLS_STEP = 6; // ditambah per kelompok supaya tidak merender ulang tiap piksel scroll
 const SMALL_SCREEN = 0.5; // di layar sempit jumlahnya dikali ini
+const LINE_DONE = 0.6; // layar sentuh: kedua garis bawah judul selesai tergambar di bagian ini dari jarak tahan
+
+/**
+ * Satu kata yang tiap hurufnya berguling seperti rol mesin slot: naik keluar, kembarannya masuk
+ * dari bawah (.roll di style.css). `start` = urutan huruf pertamanya, supaya gulirannya merambat
+ * dari kiri ke kanan melewati semua kata.
+ */
+function RollWord({ children, start = 0 }) {
+  return (
+    <span className="w">
+      {[...children].map((char, i) => (
+        // huruf berekor (g, y, …) dipotong lebih rendah supaya ekornya tidak hilang
+        <span className={/[gjpqy]/.test(char) ? "roll roll--tail" : "roll"} style={{ "--i": start + i }} key={i}>
+          <span data-char={char}>{char}</span>
+        </span>
+      ))}
+    </span>
+  );
+}
+
+/**
+ * Garis bawah satu baris judul: lurus, dan baru berjalan saat kursor di atas judul. Di layar
+ * sentuh (tanpa kursor) ia mengikuti scroll lewat --draw (lihat .cta__underline di style.css).
+ */
+function Underline() {
+  return <span className="cta__underline" aria-hidden="true" />;
+}
 
 /**
  * Penutup halaman: layar penuh warna brand dengan kolam bola 3D di atasnya.
@@ -47,6 +74,7 @@ export function Cta() {
       // jarak tahan = tinggi pembungkus − 1 layar (panel) − bagian yang ditimpa footer
       const distance = Math.max(1, rect.height - window.innerHeight - cover);
       const progress = Math.min(1, Math.max(0, -rect.top / distance));
+      hold.current.style.setProperty("--draw", Math.min(1, progress / LINE_DONE).toFixed(3));
       const scale = window.innerWidth < 700 ? SMALL_SCREEN : 1;
       const extra = Math.round((progress * BALLS_MORE) / BALLS_STEP) * BALLS_STEP;
       setBalls(Math.round((BALLS_START + extra) * scale));
@@ -75,11 +103,18 @@ export function Cta() {
         <p className="cta__kicker" data-reveal>
           Got a big idea?
         </p>
-        <h2 className="cta__title" data-split>
-          <Words>Let&apos;s work together!</Words>
+        <h2 className="cta__title" data-split aria-label="Let's Work Together">
+          <span className="cta__line">
+            <RollWord start={0}>Let&apos;s</RollWord> <RollWord start={5}>Work</RollWord>
+            <Underline />
+          </span>
+          <span className="cta__line">
+            <RollWord start={9}>Together</RollWord>
+            <Underline />
+          </span>
         </h2>
 
-        {/* di atas teks tapi tidak menangkap klik: Ballpit membaca kursor dari window */}
+        {/* di belakang teks (z-index di style.css) dan tidak menangkap klik: Ballpit membaca kursor dari window */}
         <div className="cta__balls" hidden={covered} aria-hidden="true">
           <Suspense fallback={null}>
             <Ballpit
