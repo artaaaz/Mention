@@ -6,6 +6,12 @@ import { ArrowDown } from "./ui.jsx";
 
 // Kolam bola dari React Bits (reactbits.dev → Ballpit), dimuat terpisah.
 const Ballpit = lazy(() => import("./Ballpit/Ballpit.jsx"));
+// Latar gradien berbintik dari React Bits (reactbits.dev → Grainient), juga dimuat terpisah.
+const Grainient = lazy(() => import("./Grainient/Grainient.jsx"));
+
+// Gradien panel: kuning brand (warna pertama = warna dasar saat gradien baru muncul) ke kuning
+// yang lebih tua dan lebih muda. Semuanya tetap terang supaya teks hitam terbaca.
+const GRADIENT_COLORS = ["#ffee00", "#ffc800", "#fff59a", "#ffd60a", "#ffee00"];
 
 const PLUS = [1, 2, 3, 4];
 
@@ -44,7 +50,7 @@ function Underline() {
 }
 
 /**
- * Penutup halaman: layar penuh warna brand dengan kolam bola 3D di atasnya.
+ * Penutup halaman: layar penuh gradien kuning brand dengan kolam bola 3D di atasnya.
  *
  * Panelnya "ditahan": menempel di layar selama pembungkusnya (.cta-hold) di-scroll. Selama
  * ditahan, bola baru terus berjatuhan; setelah itu footer naik menutupi panel
@@ -97,6 +103,19 @@ export function Cta() {
     // data-line-end: tujuan akhir <ScrollLine> di halaman yang memakainya
     <div className="cta-hold" ref={hold} data-line-end>
       <section className="cta" data-header="ink">
+        {/* paling belakang; sebelum termuat (atau tanpa WebGL2) yang tampak kuning polos .cta */}
+        <div className="cta__gradient" hidden={covered} aria-hidden="true">
+          <Suspense fallback={null}>
+            <Grainient
+              colors={GRADIENT_COLORS}
+              angle={120}
+              speed={0.8}
+              grainAmount={0.07}
+              grainAnimated={false} // bintiknya diam (gradiennya sendiri tetap mengalir)
+              dpr={1} // gradiennya lembut, jadi resolusi 1x sudah cukup
+            />
+          </Suspense>
+        </div>
         {PLUS.map((n) => (
           <span className={`plus cta__plus cta__plus--${n}`} aria-hidden="true" key={n} />
         ))}

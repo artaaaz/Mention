@@ -597,22 +597,32 @@ body.is-loading .header {
   align-items: end;
   gap: var(--gutter);
 }
-.hero__title {
-  font-size: clamp(2.5rem, 5.5vw, 5.75rem);
+/* Wordmark "Mention" (TechText, digambar di canvas). TechText mengecilkan teks sampai muat di
+   kotaknya — lebar tinta maks. 90% lebar kotak, tinggi tinta maks. 66% tingginya — jadi rasio
+   kotak ini yang menentukan besar hurufnya. Ia juga menyisakan 5% di kiri; margin negatif
+   mengembalikan hurufnya sejajar tepi halaman. */
+.hero__mark {
+  width: min(100%, 88vh);
+  aspect-ratio: 3.7;
+  margin-left: -4.2%;
+  margin-block: -1.5% -2%;
   font-weight: 600;
-  line-height: 0.98;
-  letter-spacing: -0.048em;
-  text-wrap: balance;
+  color: var(--white);
 }
 .hl {
   color: var(--yellow);
 }
-.hero__lede {
+.hero__tagline {
   justify-self: end;
-  max-width: 36ch;
-  margin-bottom: 0.5em;
-  color: var(--muted);
-  font-size: clamp(0.95rem, 1.15vw, 1.125rem);
+  margin-bottom: 0.9em;
+  font-size: clamp(1.25rem, 2.1vw, 2.25rem);
+  font-weight: 600;
+  line-height: 1.08;
+  letter-spacing: -0.035em;
+}
+.hero__tagline-line {
+  display: block;
+  white-space: nowrap;
 }
 
 .hero__stage {
@@ -778,6 +788,68 @@ body.is-loading .header {
   margin-top: 8px;
 }
 
+/* ───────────── Tombol magnetik ─────────────
+   Geserannya (--mx / --my) diisi Magnetic.jsx. Pakai `translate`, bukan `transform`, supaya
+   tidak bentrok dengan animasi lain. (.cta__scroll punya aturannya sendiri karena ia di-tengah-kan.) */
+.pill,
+.btn,
+.footer__top {
+  translate: var(--mx, 0px) var(--my, 0px);
+}
+
+/* ───────────── Angka (Beranda): deretan angka besar yang menghitung naik ───────────── */
+.stats {
+  padding: clamp(72px, 9vw, 150px) var(--gutter) 0;
+}
+.stats__list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(28px, 4vw, 72px) clamp(16px, 2.4vw, 40px);
+  list-style: none;
+}
+.stat {
+  display: grid;
+  align-content: start;
+  gap: clamp(12px, 1.4vw, 22px);
+  padding-top: clamp(16px, 1.8vw, 28px);
+  border-top: 1.5px solid rgba(255, 255, 255, 0.16);
+}
+.stat__value {
+  font-size: clamp(4.5rem, 12vw, 11.5rem);
+  font-weight: 600;
+  line-height: 0.86;
+  letter-spacing: -0.06em;
+  font-variant-numeric: tabular-nums; /* lebar angka tetap, jadi tidak bergoyang saat menghitung */
+}
+.stat__label {
+  max-width: 22ch;
+  color: var(--muted);
+  font-size: clamp(0.95rem, 1.15vw, 1.125rem);
+}
+@media (max-width: 700px) {
+  .stats__list {
+    grid-template-columns: 1fr;
+  }
+  .stat {
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: end;
+    gap: 20px;
+  }
+}
+
+/* ───────────── Galeri (Beranda): carousel WebGL selebar layar ───────────── */
+.gallery {
+  padding-bottom: clamp(96px, 12vw, 200px);
+}
+.gallery__head {
+  padding-inline: var(--gutter);
+}
+/* carousel mengisi kotak ini; gambarnya setinggi separuhnya, keterangannya di bawah gambar */
+.gallery__stage {
+  height: clamp(420px, 78vh, 760px);
+  margin-top: clamp(8px, 2vw, 32px);
+}
+
 /* ───────────── Karya ───────────── */
 .work {
   padding: clamp(96px, 12vw, 200px) var(--gutter);
@@ -809,6 +881,29 @@ body.is-loading .header {
   height: 100%;
   object-fit: cover;
   transition: scale 1s var(--ease);
+}
+/* video pratinjau: menutup gambar selama kursor di kartu (lihat WorkCard di Work.jsx) */
+.work-card__preview {
+  position: absolute;
+  inset: 0;
+  container-type: size;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s var(--ease);
+}
+.work-card__preview.is-visible {
+  opacity: 1;
+}
+/* iframe YouTube 16:9 dibesarkan sampai menutup kartu (+ sedikit lebih, supaya judul & logo
+   bawaan pemutarnya terpotong di luar kartu) */
+.work-card__preview iframe {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: max(118cqw, 210cqh);
+  height: max(118cqh, 66.4cqw);
+  border: 0;
+  translate: -50% -50%;
 }
 .work-card__meta {
   display: grid;
@@ -938,6 +1033,14 @@ body.is-loading .header {
   z-index: -1; /* di belakang teks, di atas latar kuning (.cta = isolation: isolate) */
   pointer-events: none;
 }
+/* gradien kuning berbintik: lapisan paling belakang, di bawah tanda plus dan bola */
+.cta__gradient {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
+}
+.cta__gradient[hidden],
 .cta__balls[hidden] {
   display: none; /* tertutup footer → Ballpit berhenti me-render */
 }
@@ -1073,7 +1176,7 @@ body.is-loading .header {
   letter-spacing: 0.1em;
   text-transform: uppercase;
   white-space: nowrap;
-  translate: -50% 0;
+  translate: calc(-50% + var(--mx, 0px)) var(--my, 0px); /* --mx/--my: tombol magnetik */
   cursor: pointer;
   transition:
     background-color 0.35s var(--ease),
@@ -1237,7 +1340,10 @@ body.is-loading .header {
     grid-template-columns: 1fr;
     gap: 16px;
   }
-  .hero__lede {
+  .hero__mark {
+    width: 100%;
+  }
+  .hero__tagline {
     justify-self: start;
     margin-bottom: 0;
   }

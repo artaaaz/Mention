@@ -1,7 +1,10 @@
+import Gallery from "../components/Gallery.jsx";
 import HeroScene from "../components/HeroScene.jsx";
 import Reel from "../components/Reel.jsx";
 import ScrollLine from "../components/ScrollLine.jsx";
 import { Cta } from "../components/sections.jsx";
+import Stats from "../components/Stats.jsx";
+import TechText from "../components/TechText/TechText.jsx";
 import { Button, Eyebrow, NextPage, Words } from "../components/ui.jsx";
 import { WorkCard } from "../components/Work.jsx";
 import { projects } from "../data/projects.js";
@@ -17,15 +20,25 @@ export default function Home() {
       {/* ───────────── Hero ───────────── */}
       <section className="hero">
         <div className="hero__top">
-          <h1 className="hero__title" data-intro-title>
-            <Words>Kami bikin brand kamu</Words>
-            <span className="hl">
-              <Words>layak di-mention.</Words>
-            </span>
+          {/* Nama studio sebagai wordmark interaktif (React Bits → TechText): hurufnya berubah jadi
+              garis putus-putus di bawah kursor. Ukurannya menyesuaikan kotak .hero__mark. */}
+          <h1 className="hero__mark" data-intro>
+            <TechText
+              text="Mention"
+              fontSize={420}
+              fontWeight={600}
+              align="left"
+              accentColor="#ffee00"
+              sweep={false} // tanpa animasi sendiri: hurufnya utuh sampai kursor menyentuhnya
+            />
           </h1>
-          <p className="hero__lede" data-intro>
-            Agensi kreatif untuk brand yang nggak mau cuma lewat di timeline — strategi, desain, konten, dan web
-            dalam satu tim.
+          <p className="hero__tagline" data-intro-title>
+            <span className="hero__tagline-line">
+              <Words>We Are Mention</Words>
+            </span>
+            <span className="hero__tagline-line hl">
+              <Words>We Come To Win</Words>
+            </span>
           </p>
         </div>
 
@@ -46,6 +59,9 @@ export default function Home() {
 
         {/* ───────────── Reel ───────────── */}
         <Reel />
+
+        {/* ───────────── Angka ───────────── */}
+        <Stats />
 
         {/* ───────────── Karya pilihan ───────────── */}
         <section className="work">
@@ -71,6 +87,9 @@ export default function Home() {
             <Button to="/projects">Lihat semua karya</Button>
           </div>
         </section>
+
+        {/* ───────────── Galeri ───────────── */}
+        <Gallery />
 
         <Cta />
       </div>

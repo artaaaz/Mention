@@ -1,6 +1,6 @@
 import { useParams } from "react-router";
 import { ArrowLeft, Eyebrow, NextPage, TLink, Words } from "../components/ui.jsx";
-import { Media, projectPath } from "../components/Work.jsx";
+import { Media, projectPath, youtubeEmbed } from "../components/Work.jsx";
 import { projects } from "../data/projects.js";
 import { useMeta } from "../hooks/useMeta.js";
 import { usePageMotion } from "../hooks/usePageMotion.js";
@@ -43,9 +43,22 @@ function ProjectDetail({ project, next }) {
         </p>
       </section>
 
-      <div className="project-cover" data-intro>
-        <Media source={project.image || project.cover} alt={project.title} />
-      </div>
+      {project.youtube ? (
+        // proyek video: pemutarnya langsung di tempat cover
+        <div className="project-cover project-cover--video" data-intro>
+          <iframe
+            src={youtubeEmbed(project.youtube)}
+            title={project.title}
+            allow="autoplay; encrypted-media; picture-in-picture; fullscreen"
+            allowFullScreen
+            loading="lazy"
+          />
+        </div>
+      ) : (
+        <div className="project-cover" data-intro>
+          <Media source={project.image || project.cover} alt={project.title} />
+        </div>
+      )}
 
       <section className="project-body">
         <dl className="project-meta" data-reveal>
@@ -62,16 +75,22 @@ function ProjectDetail({ project, next }) {
             <dd>{project.tags.join(", ")}</dd>
           </div>
         </dl>
-        <div className="project-text">
-          <div data-reveal>
-            <h2>Tantangan</h2>
-            <p>{project.challenge}</p>
+        {(project.challenge || project.solution) && (
+          <div className="project-text">
+            {project.challenge && (
+              <div data-reveal>
+                <h2>Tantangan</h2>
+                <p>{project.challenge}</p>
+              </div>
+            )}
+            {project.solution && (
+              <div data-reveal>
+                <h2>Solusi</h2>
+                <p>{project.solution}</p>
+              </div>
+            )}
           </div>
-          <div data-reveal>
-            <h2>Solusi</h2>
-            <p>{project.solution}</p>
-          </div>
-        </div>
+        )}
       </section>
 
       {project.gallery?.length > 0 && (

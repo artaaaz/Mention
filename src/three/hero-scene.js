@@ -83,7 +83,9 @@ export function createHeroScene(canvas, container, { reduceMotion = false } = {}
     alpha: true,
     powerPreference: "high-performance",
   });
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  // maks. 1.5: di layar rapat (HP, laptop 2x) jumlah piksel yang digambar hampir separuh dari 2x,
+  // bedanya nyaris tak terlihat karena antialias tetap menyala
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
   renderer.setClearColor(0x000000, 0);
   renderer.toneMapping = THREE.NeutralToneMapping;
   renderer.toneMappingExposure = 1.05;

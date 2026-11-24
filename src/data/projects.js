@@ -6,10 +6,62 @@
 //  image    : path gambar cover (mis. "/karya/kopi-senja.jpg" di folder public/).
 //             Kalau kosong, dipakai pola placeholder dari `cover`.
 //  cover    : pola placeholder → rings | dots | stripes | sweep | bars | arcs
+//  youtube  : ID video YouTube (bagian setelah youtu.be/ …). Videonya diputar tanpa suara saat
+//             kursor di kartu, dan jadi pemutar di halaman detail proyek.
+//  video    : sama seperti `youtube`, tapi file sendiri, mis. "/karya/nama.mp4"
+//  challenge, solution : boleh dikosongkan — bagian itu tidak ditampilkan kalau kosong
 //  gallery  : daftar gambar (path) atau nama pola placeholder
 // ─────────────────────────────────────────────────────────────
 
 export const projects = [
+  // ── Karya asli (video untuk SMK TI BAZMA). Ringkasannya masih satu kalimat — lengkapi, dan
+  //    tambahkan `challenge` / `solution` kalau mau halaman detailnya bercerita lebih banyak.
+  {
+    slug: "energi-masa-depan-indonesia",
+    title: "Energi Masa Depan Indonesia",
+    client: "SMK TI BAZMA",
+    year: "2026",
+    category: "Video",
+    tags: ["video profil"],
+    image: "/galeri/m8Q1XqifQfw.jpg",
+    youtube: "m8Q1XqifQfw",
+    summary: "Video profil SMK TI BAZMA tahun 2026.",
+  },
+  {
+    slug: "esok",
+    title: "Esok: untuk mereka yang tak menyerah",
+    client: "SMK TI BAZMA",
+    year: "2025",
+    category: "Video",
+    tags: ["film pendek"],
+    image: "/galeri/7ffGMNfZWVY.jpg",
+    youtube: "7ffGMNfZWVY",
+    summary: "Film pendek untuk SMK TI BAZMA.",
+  },
+  {
+    slug: "alam-bercerita",
+    title: "Alam Bercerita",
+    client: "SMK TI BAZMA",
+    year: "2025",
+    category: "Video",
+    tags: ["video acara"],
+    image: "/galeri/tAiDMQziZuI.jpg",
+    youtube: "tAiDMQziZuI",
+    summary: "Video Lepas Juang Angkatan 1 SMK TI BAZMA.",
+  },
+  {
+    slug: "kilas-balik-smk-ti-bazma",
+    title: "Kilas Balik Perjalanan SMK TI BAZMA",
+    client: "SMK TI BAZMA",
+    year: "2025",
+    category: "Video",
+    tags: ["dokumenter"],
+    image: "/galeri/tM8rFu3mwCY.jpg",
+    youtube: "tM8rFu3mwCY",
+    summary: "Dokumenter perjalanan SMK TI BAZMA.",
+  },
+
+  // ── Contoh (placeholder) — ganti dengan karya asli atau hapus
   {
     slug: "kopi-senja",
     title: "Kopi Senja",

@@ -3,6 +3,7 @@ import { Route, Routes, useLocation, useNavigate } from "react-router";
 import CursorBadge from "./components/CursorBadge.jsx";
 import Footer from "./components/Footer.jsx";
 import Header from "./components/Header.jsx";
+import Magnetic from "./components/Magnetic.jsx";
 import { AppContext, markSceneReady, sceneReady } from "./lib/app-context.js";
 import { LEAVE_MS, reduceMotion, ScrollTrigger } from "./lib/motion.js";
 import { initScroll, jumpToTop, scrollToTop, startScroll, stopScroll } from "./lib/scroll.js";
@@ -108,6 +109,7 @@ export default function App() {
     <AppContext.Provider value={context}>
       <Header />
       <CursorBadge />
+      <Magnetic />
 
       <main id="top">
         {/* key = path → tiap halaman di-mount ulang, animasinya ikut diputar ulang */}
