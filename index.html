@@ -36,14 +36,17 @@
     <!-- Splash ditaruh di luar React supaya langsung tampil sebelum JavaScript selesai dimuat.
          Urutan animasinya diatur di src/lib/splash.js -->
     <div class="splash" id="splash" aria-hidden="true">
-      <div class="splash__glow"></div>
-      <div class="splash__logo">
-        <div class="splash__row">
-          <div class="splash__m"><span></span></div>
-          <div class="splash__ention"><span></span></div>
-        </div>
+      <div class="splash__top">
+        <span>Memuat</span>
       </div>
-      <div class="splash__bar"><span></span></div>
+      <div class="splash__center">
+        <div class="splash__m"><span></span></div>
+      </div>
+      <div class="splash__bottom">
+        <div class="splash__count"><span class="splash__num">0</span></div>
+        <div class="splash__bar"><span></span></div>
+      </div>
+      <div class="splash__flood"></div>
     </div>
 
     <div id="root"></div>
